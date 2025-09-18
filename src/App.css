@@ -32,11 +32,12 @@ body {
   right: 0;
   bottom: 0;
   background-image: 
-    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M50 180 Q30 160 40 140 Q50 120 60 100 Q70 80 80 60 Q90 40 100 20 Q110 40 120 60 Q130 80 140 100 Q150 120 160 140 Q170 160 150 180" stroke="%2366aa66" stroke-width="2" fill="none" opacity="0.3"/><path d="M60 180 Q50 160 55 140 Q60 120 70 100 Q80 80 90 60 Q100 40 110 20 Q120 40 130 60 Q140 80 150 100 Q160 120 165 140 Q170 160 160 180" stroke="%2344aa44" stroke-width="1.5" fill="none" opacity="0.2"/><circle cx="40" cy="140" r="3" fill="%2366aa66" opacity="0.4"/><circle cx="160" cy="140" r="2" fill="%2344aa44" opacity="0.3"/></svg>');
-  background-size: 300px 300px;
-  background-position: -50px -50px;
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400"><path d="M50 350 Q30 330 40 310 Q50 290 60 270 Q70 250 80 230 Q90 210 100 190 Q110 170 120 150 Q130 130 140 110 Q150 90 160 70 Q170 50 180 30 Q190 50 200 70 Q210 90 220 110 Q230 130 240 150 Q250 170 260 190 Q270 210 280 230 Q290 250 300 270 Q310 290 320 310 Q330 330 350 350" stroke="%2366aa66" stroke-width="3" fill="none" opacity="0.4"/><path d="M80 350 Q70 330 75 310 Q80 290 90 270 Q100 250 110 230 Q120 210 130 190 Q140 170 150 150 Q160 130 170 110 Q180 90 190 70 Q200 50 210 30 Q220 50 230 70 Q240 90 250 110 Q260 130 270 150 Q280 170 290 190 Q300 210 310 230 Q320 250 330 270 Q340 290 345 310 Q350 330 320 350" stroke="%2344aa44" stroke-width="2" fill="none" opacity="0.3"/><path d="M120 350 Q110 330 115 310 Q120 290 130 270 Q140 250 150 230 Q160 210 170 190 Q180 170 190 150 Q200 130 210 110 Q220 90 230 70 Q240 50 250 30 Q260 50 270 70 Q280 90 290 110 Q300 130 310 150 Q320 170 330 190 Q340 210 350 230 Q360 250 370 270 Q375 290 380 310 Q385 330 360 350" stroke="%2288cc88" stroke-width="2.5" fill="none" opacity="0.25"/><circle cx="60" cy="310" r="4" fill="%2366aa66" opacity="0.5"/><circle cx="180" cy="150" r="3" fill="%2344aa44" opacity="0.4"/><circle cx="300" cy="270" r="3.5" fill="%2288cc88" opacity="0.3"/><circle cx="120" cy="230" r="2.5" fill="%2366aa66" opacity="0.4"/><circle cx="240" cy="110" r="2" fill="%2344aa44" opacity="0.3"/></svg>'),
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 300 300"><path d="M20 280 Q10 260 25 240 Q40 220 55 200 Q70 180 85 160 Q100 140 115 120 Q130 100 145 80 Q160 60 175 40 Q190 20 205 40 Q220 60 235 80 Q250 100 265 120 Q280 140 295 160 Q310 180 325 200 Q340 220 355 240 Q370 260 360 280" stroke="%2255bb55" stroke-width="2" fill="none" opacity="0.3"/><path d="M40 280 Q35 260 45 240 Q55 220 70 200 Q85 180 100 160 Q115 140 130 120 Q145 100 160 80 Q175 60 190 40 Q205 20 220 40 Q235 60 250 80 Q265 100 280 120 Q295 140 310 160 Q325 180 340 200 Q355 220 365 240 Q375 260 370 280" stroke="%2277dd77" stroke-width="1.5" fill="none" opacity="0.2"/><circle cx="30" cy="240" r="3" fill="%2255bb55" opacity="0.4"/><circle cx="150" cy="120" r="2.5" fill="%2277dd77" opacity="0.3"/><circle cx="270" cy="200" r="2" fill="%2255bb55" opacity="0.3"/></svg>');
+  background-size: 400px 400px, 300px 300px;
+  background-position: -100px -100px, 200px 100px;
   background-repeat: no-repeat;
-  opacity: 0.6;
+  opacity: 0.7;
   z-index: 1;
 }
 
@@ -58,6 +59,30 @@ body {
 
 .content {
   text-align: center;
+}
+
+.name {
+  font-size: 3.5rem;
+  color: #1a4a1a;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
+  position: relative;
+  background: linear-gradient(135deg, #2d5a2d, #44aa44, #66aa66);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: nameGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes nameGlow {
+  0% {
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 20px rgba(102, 170, 102, 0.3);
+  }
+  100% {
+    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 30px rgba(102, 170, 102, 0.6);
+  }
 }
 
 .title {
@@ -204,6 +229,11 @@ body {
     margin: 10px;
   }
   
+  .name {
+    font-size: 2.8rem;
+    letter-spacing: 2px;
+  }
+  
   .title {
     font-size: 2rem;
   }
@@ -219,6 +249,11 @@ body {
 }
 
 @media (max-width: 480px) {
+  .name {
+    font-size: 2.2rem;
+    letter-spacing: 1.5px;
+  }
+  
   .title {
     font-size: 1.8rem;
   }

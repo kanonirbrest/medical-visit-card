@@ -34,6 +34,7 @@ function App() {
     <div className="app">
       <div className="visit-card">
         <div className="content">
+          <div className="name">ЕЛЕНА</div>
           <h1 className="title">Специалист по оздоровлению</h1>
           
           <div className="contact-block">
