@@ -1,0 +1,234 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Arial', sans-serif;
+  background: linear-gradient(135deg, #e8f5e8 0%, #f0f8f0 50%, #e8f5e8 100%);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+.app {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  position: relative;
+  background-image: 
+    radial-gradient(circle at 20% 80%, rgba(120, 200, 120, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(100, 180, 100, 0.1) 0%, transparent 50%),
+    linear-gradient(45deg, transparent 30%, rgba(140, 220, 140, 0.05) 50%, transparent 70%);
+}
+
+.app::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-image: 
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><path d="M50 180 Q30 160 40 140 Q50 120 60 100 Q70 80 80 60 Q90 40 100 20 Q110 40 120 60 Q130 80 140 100 Q150 120 160 140 Q170 160 150 180" stroke="%2366aa66" stroke-width="2" fill="none" opacity="0.3"/><path d="M60 180 Q50 160 55 140 Q60 120 70 100 Q80 80 90 60 Q100 40 110 20 Q120 40 130 60 Q140 80 150 100 Q160 120 165 140 Q170 160 160 180" stroke="%2344aa44" stroke-width="1.5" fill="none" opacity="0.2"/><circle cx="40" cy="140" r="3" fill="%2366aa66" opacity="0.4"/><circle cx="160" cy="140" r="2" fill="%2344aa44" opacity="0.3"/></svg>');
+  background-size: 300px 300px;
+  background-position: -50px -50px;
+  background-repeat: no-repeat;
+  opacity: 0.6;
+  z-index: 1;
+}
+
+.visit-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 20px;
+  box-shadow: 
+    0 20px 40px rgba(0, 0, 0, 0.1),
+    0 10px 20px rgba(0, 0, 0, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  padding: 40px;
+  max-width: 500px;
+  width: 100%;
+  position: relative;
+  z-index: 2;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.content {
+  text-align: center;
+}
+
+.title {
+  font-size: 2.5rem;
+  color: #2d5a2d;
+  margin-bottom: 40px;
+  font-weight: 300;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  position: relative;
+}
+
+.title::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 3px;
+  background: linear-gradient(90deg, #66aa66, #44aa44);
+  border-radius: 2px;
+}
+
+.contact-block {
+  margin-top: 30px;
+}
+
+.contact-block h2 {
+  color: #2d5a2d;
+  font-size: 1.8rem;
+  margin-bottom: 30px;
+  font-weight: 400;
+}
+
+.phone-section {
+  margin-bottom: 30px;
+  padding: 20px;
+  background: rgba(102, 170, 102, 0.1);
+  border-radius: 15px;
+  border: 1px solid rgba(102, 170, 102, 0.2);
+}
+
+.phone-label {
+  display: block;
+  color: #2d5a2d;
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  font-weight: 500;
+}
+
+.phone-number {
+  color: #1a4a1a;
+  font-size: 1.5rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-block;
+  padding: 10px 20px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 10px;
+  border: 2px solid transparent;
+}
+
+.phone-number:hover {
+  color: #66aa66;
+  background: rgba(102, 170, 102, 0.1);
+  border-color: #66aa66;
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(102, 170, 102, 0.3);
+}
+
+.messaging-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  margin-top: 20px;
+}
+
+.contact-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  padding: 15px 25px;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.contact-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  transition: left 0.5s ease;
+}
+
+.contact-btn:hover::before {
+  left: 100%;
+}
+
+.telegram-btn {
+  background: linear-gradient(135deg, #0088cc, #0066aa);
+  color: white;
+  box-shadow: 0 4px 15px rgba(0, 136, 204, 0.3);
+}
+
+.telegram-btn:hover {
+  background: linear-gradient(135deg, #0066aa, #004488);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 136, 204, 0.4);
+}
+
+.viber-btn {
+  background: linear-gradient(135deg, #665cac, #4a4a8a);
+  color: white;
+  box-shadow: 0 4px 15px rgba(102, 92, 172, 0.3);
+}
+
+.viber-btn:hover {
+  background: linear-gradient(135deg, #4a4a8a, #3a3a6a);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(102, 92, 172, 0.4);
+}
+
+.btn-icon {
+  font-size: 1.3rem;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+  .visit-card {
+    padding: 30px 20px;
+    margin: 10px;
+  }
+  
+  .title {
+    font-size: 2rem;
+  }
+  
+  .phone-number {
+    font-size: 1.3rem;
+  }
+  
+  .contact-btn {
+    padding: 12px 20px;
+    font-size: 1rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: 1.8rem;
+  }
+  
+  .contact-block h2 {
+    font-size: 1.5rem;
+  }
+  
+  .phone-number {
+    font-size: 1.2rem;
+    padding: 8px 15px;
+  }
+}
