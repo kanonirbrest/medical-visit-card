@@ -11,9 +11,22 @@ function App() {
   };
 
   const handleViberClick = () => {
-    // Открываем Viber веб-версию напрямую
-    const viberWebUrl = `https://chats.viber.com/${phoneNumber.replace('+', '')}`;
-    window.open(viberWebUrl, '_blank');
+    // Пытаемся открыть Viber приложение, если не получается - веб-версию
+    const viberAppUrl = `viber://chat?number=${phoneNumber}`;
+    const viberWebUrl = `https://chats.viber.com/${phoneNumber}`;
+    
+    // Создаем скрытую ссылку для приложения
+    const appLink = document.createElement('a');
+    appLink.href = viberAppUrl;
+    appLink.style.display = 'none';
+    document.body.appendChild(appLink);
+    appLink.click();
+    document.body.removeChild(appLink);
+    
+    // Если через 2 секунды ничего не произошло, открываем веб-версию
+    setTimeout(() => {
+      window.open(viberWebUrl, '_blank');
+    }, 2000);
   };
 
   const handlePhoneClick = () => {
