@@ -11,19 +11,9 @@ function App() {
   };
 
   const handleViberClick = () => {
-    // Попытка открыть Viber приложение, если не получается - открыть веб-версию
-    const viberUrl = `viber://chat?number=${phoneNumber.replace('+', '')}`;
+    // Открываем Viber веб-версию напрямую
     const viberWebUrl = `https://chats.viber.com/${phoneNumber.replace('+', '')}`;
-    
-    // Сначала пытаемся открыть приложение
-    const link = document.createElement('a');
-    link.href = viberUrl;
-    link.click();
-    
-    // Если через 1 секунду ничего не произошло, открываем веб-версию
-    setTimeout(() => {
-      window.open(viberWebUrl, '_blank');
-    }, 1000);
+    window.open(viberWebUrl, '_blank');
   };
 
   const handlePhoneClick = () => {
