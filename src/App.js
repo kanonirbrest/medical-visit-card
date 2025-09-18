@@ -6,7 +6,7 @@ function App() {
   
   const handleTelegramClick = () => {
     // Попытка открыть Telegram приложение, если не получается - открыть веб-версию
-    const telegramUrl = `https://t.me/${phoneNumber.replace('+', '')}`;
+    const telegramUrl = `https://t.me/${phoneNumber}`;
     window.open(telegramUrl, '_blank');
   };
 
@@ -34,11 +34,10 @@ function App() {
     <div className="app">
       <div className="visit-card">
         <div className="content">
-          <div className="name">ЕЛЕНА</div>
           <h1 className="title">Специалист по оздоровлению</h1>
           
           <div className="contact-block">
-            <h2>Контакты</h2>
+            <h2>Контакты <span className="name-inline">(Елена Васильевна)</span></h2>
             
             <div className="phone-section">
               <span className="phone-label">Телефон:</span>

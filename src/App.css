@@ -61,28 +61,13 @@ body {
   text-align: center;
 }
 
-.name {
-  font-size: 3.5rem;
-  color: #1a4a1a;
-  margin-bottom: 20px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15);
-  position: relative;
-  background: linear-gradient(135deg, #2d5a2d, #44aa44, #66aa66);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  animation: nameGlow 3s ease-in-out infinite alternate;
-}
-
-@keyframes nameGlow {
-  0% {
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 20px rgba(102, 170, 102, 0.3);
-  }
-  100% {
-    text-shadow: 0 3px 6px rgba(0, 0, 0, 0.15), 0 0 30px rgba(102, 170, 102, 0.6);
-  }
+.name-inline {
+  font-size: 1.2rem;
+  color: #2d5a2d;
+  font-weight: 500;
+  font-style: italic;
+  opacity: 0.8;
+  margin-left: 8px;
 }
 
 .title {
@@ -229,9 +214,8 @@ body {
     margin: 10px;
   }
   
-  .name {
-    font-size: 2.8rem;
-    letter-spacing: 2px;
+  .name-inline {
+    font-size: 1rem;
   }
   
   .title {
@@ -249,9 +233,8 @@ body {
 }
 
 @media (max-width: 480px) {
-  .name {
-    font-size: 2.2rem;
-    letter-spacing: 1.5px;
+  .name-inline {
+    font-size: 0.9rem;
   }
   
   .title {
