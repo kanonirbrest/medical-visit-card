@@ -9,7 +9,8 @@ function App() {
   const diplomas = [
     require('./assets/diploms/1.jpg'),
     require('./assets/diploms/2.jpg'),
-    require('./assets/diploms/3.jpg')
+    require('./assets/diploms/3.jpg'),
+    require('./assets/diploms/4.jpg')
   ];
   
   const handleTelegramClick = () => {
@@ -47,6 +48,10 @@ function App() {
 
   const prevDiploma = () => {
     setCurrentDiploma((prev) => (prev - 1 + diplomas.length) % diplomas.length);
+  };
+
+  const openDiplomaInNewTab = () => {
+    window.open(diplomas[currentDiploma], '_blank');
   };
 
   return (
@@ -114,12 +119,15 @@ function App() {
                   ‹
                 </button>
                 
-                <div className="diploma-container">
+                <div className="diploma-container" onClick={openDiplomaInNewTab}>
                   <img 
                     src={diplomas[currentDiploma]} 
                     alt={`Диплом ${currentDiploma + 1}`}
                     className="diploma-image"
                   />
+                  <div className="diploma-overlay">
+                    <span className="overlay-text">Нажмите для увеличения</span>
+                  </div>
                 </div>
                 
                 <button className="slider-btn next-btn" onClick={nextDiploma}>
