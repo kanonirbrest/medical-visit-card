@@ -338,42 +338,8 @@ body {
   height: 100%;
   object-fit: contain;
   display: block;
-  transition: opacity 0.3s ease;
 }
 
-.diploma-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 15px;
-}
-
-.diploma-container:hover .diploma-overlay {
-  opacity: 1;
-}
-
-.diploma-container:hover .diploma-image {
-  opacity: 0.8;
-}
-
-.overlay-text {
-  color: white;
-  font-size: 1.2rem;
-  font-weight: 500;
-  text-align: center;
-  padding: 10px 20px;
-  background: rgba(102, 170, 102, 0.9);
-  border-radius: 25px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-}
 
 .diploma-dots {
   display: flex;

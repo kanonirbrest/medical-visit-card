@@ -5,6 +5,8 @@ function App() {
   const phoneNumber = '+375292242006';
   const [activeSection, setActiveSection] = useState('contacts');
   const [currentDiploma, setCurrentDiploma] = useState(0);
+  const [touchStart, setTouchStart] = useState(null);
+  const [touchEnd, setTouchEnd] = useState(null);
   
   const diplomas = [
     require('./assets/diploms/1.jpg'),
@@ -52,6 +54,30 @@ function App() {
 
   const openDiplomaInNewTab = () => {
     window.open(diplomas[currentDiploma], '_blank');
+  };
+
+  const handleTouchStart = (e) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      nextDiploma();
+    }
+    if (isRightSwipe) {
+      prevDiploma();
+    }
   };
 
   return (
@@ -119,16 +145,19 @@ function App() {
                   ‹
                 </button>
                 
-                <div className="diploma-container" onClick={openDiplomaInNewTab}>
-                  <img 
-                    src={diplomas[currentDiploma]} 
-                    alt={`Диплом ${currentDiploma + 1}`}
-                    className="diploma-image"
-                  />
-                  <div className="diploma-overlay">
-                    <span className="overlay-text">Нажмите для увеличения</span>
-                  </div>
-                </div>
+                        <div 
+                          className="diploma-container" 
+                          onClick={openDiplomaInNewTab}
+                          onTouchStart={handleTouchStart}
+                          onTouchMove={handleTouchMove}
+                          onTouchEnd={handleTouchEnd}
+                        >
+                          <img
+                            src={diplomas[currentDiploma]}
+                            alt={`Диплом ${currentDiploma + 1}`}
+                            className="diploma-image"
+                          />
+                        </div>
                 
                 <button className="slider-btn next-btn" onClick={nextDiploma}>
                   ›
