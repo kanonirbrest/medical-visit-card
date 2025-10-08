@@ -133,6 +133,18 @@ function App() {
                 Написать в Viber
               </button>
             </div>
+
+            <div className="qr-section">
+              <h3>QR-код визитки</h3>
+              <div className="qr-container">
+                <img 
+                  src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent('https://elena-visit-card.vercel.app')}`}
+                  alt="QR-код визитки"
+                  className="qr-code"
+                />
+              </div>
+              <p className="qr-description">Отсканируйте для быстрого доступа к визитке</p>
+            </div>
           </div>
           )}
           
