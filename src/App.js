@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './App.css';
 
 function App() {
@@ -7,6 +7,13 @@ function App() {
   const [currentDiploma, setCurrentDiploma] = useState(0);
   const [touchStart, setTouchStart] = useState(null);
   const [touchEnd, setTouchEnd] = useState(null);
+  const [reviews, setReviews] = useState([]);
+  const [reviewForm, setReviewForm] = useState({ name: '', text: '', rating: 5 });
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // JSONBin.io конфигурация
+  const JSONBIN_ID = process.env.REACT_APP_JSONBIN_ID || '6963e58a43b1c97be9293b4e';
+  const JSONBIN_API_KEY = process.env.REACT_APP_JSONBIN_API_KEY || '$2a$10$O5gSh4of1jGQ5ZzefIM.2OIQLPTGPZ0/.LAOR.bGIM2/USlHIGYMi';
   
   const diplomas = [
     require('./assets/diploms/1.jpg'),
@@ -80,6 +87,116 @@ function App() {
     }
   };
 
+  // Загрузка отзывов из JSONBin.io или localStorage
+  const loadReviews = async () => {
+    // Проверяем, настроен ли JSONBin.io
+    if (JSONBIN_ID !== 'YOUR_BIN_ID' && JSONBIN_API_KEY !== 'YOUR_API_KEY') {
+      try {
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}/latest`, {
+          headers: {
+            'X-Master-Key': JSONBIN_API_KEY
+          }
+        });
+        const data = await response.json();
+        // Поддерживаем оба формата: объект с reviews или массив напрямую
+        let reviewsData = [];
+        if (data.record) {
+          if (Array.isArray(data.record)) {
+            reviewsData = data.record;
+          } else if (data.record.reviews && Array.isArray(data.record.reviews)) {
+            reviewsData = data.record.reviews;
+          }
+        }
+        if (reviewsData.length >= 0) {
+          setReviews(reviewsData);
+          // Сохраняем в localStorage как резервную копию
+          localStorage.setItem('reviews_backup', JSON.stringify(reviewsData));
+        }
+      } catch (error) {
+        console.error('Ошибка загрузки отзывов из JSONBin.io:', error);
+        // Пытаемся загрузить из localStorage
+        const localReviews = localStorage.getItem('reviews');
+        if (localReviews) {
+          setReviews(JSON.parse(localReviews));
+        }
+      }
+    } else {
+      // Используем localStorage как временное решение
+      const localReviews = localStorage.getItem('reviews');
+      if (localReviews) {
+        setReviews(JSON.parse(localReviews));
+      }
+    }
+  };
+
+  // Отправка нового отзыва
+  const submitReview = async (e) => {
+    e.preventDefault();
+    if (!reviewForm.name.trim() || !reviewForm.text.trim()) {
+      alert('Пожалуйста, заполните все поля');
+      return;
+    }
+
+    setIsSubmitting(true);
+    
+    const newReview = {
+      id: Date.now(),
+      name: reviewForm.name.trim(),
+      text: reviewForm.text.trim(),
+      rating: reviewForm.rating,
+      date: new Date().toLocaleDateString('ru-RU')
+    };
+
+    const updatedReviews = [...reviews, newReview];
+
+    // Проверяем, настроен ли JSONBin.io
+    if (JSONBIN_ID !== 'YOUR_BIN_ID' && JSONBIN_API_KEY !== 'YOUR_API_KEY') {
+      try {
+        // Отправляем объект с reviews, чтобы избежать ошибки "Bin cannot be blank"
+        const response = await fetch(`https://api.jsonbin.io/v3/b/${JSONBIN_ID}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'X-Master-Key': JSONBIN_API_KEY
+          },
+          body: JSON.stringify({ reviews: updatedReviews })
+        });
+
+        if (response.ok) {
+          setReviews(updatedReviews);
+          localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+          setReviewForm({ name: '', text: '', rating: 5 });
+          alert('Спасибо за ваш отзыв!');
+        } else {
+          throw new Error('Ошибка отправки отзыва');
+        }
+      } catch (error) {
+        console.error('Ошибка отправки отзыва в JSONBin.io:', error);
+        // Сохраняем в localStorage как запасной вариант
+        setReviews(updatedReviews);
+        localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+        setReviewForm({ name: '', text: '', rating: 5 });
+        alert('Отзыв сохранен локально. Для синхронизации настройте JSONBin.io.');
+      } finally {
+        setIsSubmitting(false);
+      }
+    } else {
+      // Используем localStorage как временное решение
+      setReviews(updatedReviews);
+      localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+      setReviewForm({ name: '', text: '', rating: 5 });
+      alert('Спасибо за ваш отзыв! (Сохранено локально. Для синхронизации настройте JSONBin.io)');
+      setIsSubmitting(false);
+    }
+  };
+
+  // Загружаем отзывы при монтировании компонента
+  useEffect(() => {
+    if (JSONBIN_ID !== 'YOUR_BIN_ID') {
+      loadReviews();
+    }
+  }, []);
+
   return (
     <div className="app">
       <div className="visit-card">
@@ -98,6 +215,12 @@ function App() {
               onClick={() => setActiveSection('diplomas')}
             >
               Дипломы
+            </button>
+            <button 
+              className={`tab-button ${activeSection === 'reviews' ? 'active' : ''}`}
+              onClick={() => setActiveSection('reviews')}
+            >
+              Отзывы
             </button>
           </div>
           
@@ -145,6 +268,29 @@ function App() {
               </div>
               <p className="qr-description">Отсканируйте для быстрого доступа к визитке</p>
             </div>
+
+            {reviews.length > 0 && (
+              <div className="reviews-preview">
+                <h3>Последние отзывы</h3>
+                <div className="reviews-preview-list">
+                  {reviews.slice(0, 3).map((review) => (
+                    <div key={review.id} className="review-preview-item">
+                      <div className="review-preview-header">
+                        <span className="review-preview-name">{review.name}</span>
+                        <span className="review-preview-rating">{'⭐'.repeat(review.rating)}</span>
+                      </div>
+                      <p className="review-preview-text">{review.text.length > 100 ? review.text.substring(0, 100) + '...' : review.text}</p>
+                    </div>
+                  ))}
+                </div>
+                <button 
+                  className="view-all-reviews-btn"
+                  onClick={() => setActiveSection('reviews')}
+                >
+                  Посмотреть все отзывы
+                </button>
+              </div>
+            )}
           </div>
           )}
           
@@ -184,6 +330,93 @@ function App() {
                     onClick={() => setCurrentDiploma(index)}
                   />
                 ))}
+              </div>
+            </div>
+          )}
+
+          {activeSection === 'reviews' && (
+            <div className="reviews-block">
+              <h2>Отзывы</h2>
+              
+              {(JSONBIN_ID === 'YOUR_BIN_ID' || JSONBIN_API_KEY === 'YOUR_API_KEY') && (
+                <div className="setup-notice">
+                  <p>ℹ️ Отзывы сохраняются локально в браузере</p>
+                  <p>Для синхронизации между устройствами настройте JSONBin.io (см. <code>JSONBIN_SETUP.md</code>)</p>
+                </div>
+              )}
+              
+              <form className="review-form" onSubmit={submitReview}>
+                <h3>Оставить отзыв</h3>
+                
+                <div className="form-group">
+                  <label htmlFor="review-name">Ваше имя:</label>
+                  <input
+                    type="text"
+                    id="review-name"
+                    value={reviewForm.name}
+                    onChange={(e) => setReviewForm({...reviewForm, name: e.target.value})}
+                    placeholder="Введите ваше имя"
+                    required
+                  />
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="review-rating">Оценка:</label>
+                  <div className="rating-input">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        type="button"
+                        className={`star-btn ${star <= reviewForm.rating ? 'active' : ''}`}
+                        onClick={() => setReviewForm({...reviewForm, rating: star})}
+                      >
+                        ⭐
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="form-group">
+                  <label htmlFor="review-text">Ваш отзыв:</label>
+                  <textarea
+                    id="review-text"
+                    value={reviewForm.text}
+                    onChange={(e) => setReviewForm({...reviewForm, text: e.target.value})}
+                    placeholder="Поделитесь своими впечатлениями..."
+                    rows="4"
+                    required
+                  />
+                </div>
+
+                <button 
+                  type="submit" 
+                  className="submit-review-btn"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? 'Отправка...' : 'Отправить отзыв'}
+                </button>
+              </form>
+
+              <div className="reviews-list">
+                <h3>Отзывы клиентов</h3>
+                {reviews.length === 0 ? (
+                  <p className="no-reviews">Пока нет отзывов. Будьте первым!</p>
+                ) : (
+                  <div className="reviews-container">
+                    {reviews.map((review) => (
+                      <div key={review.id} className="review-item">
+                        <div className="review-header">
+                          <span className="review-name">{review.name}</span>
+                          <span className="review-date">{review.date}</span>
+                        </div>
+                        <div className="review-rating">
+                          {'⭐'.repeat(review.rating)}
+                        </div>
+                        <p className="review-text">{review.text}</p>
+                      </div>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           )}
