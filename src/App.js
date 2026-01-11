@@ -139,12 +139,22 @@ function App() {
 
     setIsSubmitting(true);
     
+    const now = new Date();
     const newReview = {
       id: Date.now(),
       name: reviewForm.name.trim(),
       text: reviewForm.text.trim(),
       rating: reviewForm.rating,
-      date: new Date().toLocaleDateString('ru-RU')
+      date: now.toLocaleDateString('ru-RU', { 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+      }),
+      time: now.toLocaleTimeString('ru-RU', { 
+        hour: '2-digit', 
+        minute: '2-digit' 
+      }),
+      timestamp: now.toISOString()
     };
 
     const updatedReviews = [...reviews, newReview];
@@ -407,7 +417,10 @@ function App() {
                       <div key={review.id} className="review-item">
                         <div className="review-header">
                           <span className="review-name">{review.name}</span>
-                          <span className="review-date">{review.date}</span>
+                          <span className="review-date">
+                            {review.date}
+                            {review.time && <span className="review-time">, {review.time}</span>}
+                          </span>
                         </div>
                         <div className="review-rating">
                           {'⭐'.repeat(review.rating)}
