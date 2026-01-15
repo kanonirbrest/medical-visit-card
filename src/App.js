@@ -87,6 +87,18 @@ function App() {
     }
   };
 
+  // Сортировка отзывов от новых к старым
+  const sortReviews = (reviewsArray) => {
+    return [...reviewsArray].sort((a, b) => {
+      // Используем timestamp если есть
+      if (a.timestamp && b.timestamp) {
+        return new Date(b.timestamp) - new Date(a.timestamp);
+      }
+      // Иначе используем id (который основан на Date.now())
+      return (b.id || 0) - (a.id || 0);
+    });
+  };
+
   // Загрузка отзывов из JSONBin.io или localStorage
   const loadReviews = async () => {
     // Проверяем, настроен ли JSONBin.io
@@ -108,23 +120,28 @@ function App() {
           }
         }
         if (reviewsData.length >= 0) {
-          setReviews(reviewsData);
+          const sortedReviews = sortReviews(reviewsData);
+          setReviews(sortedReviews);
           // Сохраняем в localStorage как резервную копию
-          localStorage.setItem('reviews_backup', JSON.stringify(reviewsData));
+          localStorage.setItem('reviews_backup', JSON.stringify(sortedReviews));
         }
       } catch (error) {
         console.error('Ошибка загрузки отзывов из JSONBin.io:', error);
         // Пытаемся загрузить из localStorage
         const localReviews = localStorage.getItem('reviews');
         if (localReviews) {
-          setReviews(JSON.parse(localReviews));
+          const parsedReviews = JSON.parse(localReviews);
+          const sortedReviews = sortReviews(parsedReviews);
+          setReviews(sortedReviews);
         }
       }
     } else {
       // Используем localStorage как временное решение
       const localReviews = localStorage.getItem('reviews');
       if (localReviews) {
-        setReviews(JSON.parse(localReviews));
+        const parsedReviews = JSON.parse(localReviews);
+        const sortedReviews = sortReviews(parsedReviews);
+        setReviews(sortedReviews);
       }
     }
   };
@@ -173,8 +190,9 @@ function App() {
         });
 
         if (response.ok) {
-          setReviews(updatedReviews);
-          localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+          const sortedReviews = sortReviews(updatedReviews);
+          setReviews(sortedReviews);
+          localStorage.setItem('reviews', JSON.stringify(sortedReviews));
           setReviewForm({ name: '', text: '', rating: 5 });
           alert('Спасибо за ваш отзыв!');
         } else {
@@ -183,8 +201,9 @@ function App() {
       } catch (error) {
         console.error('Ошибка отправки отзыва в JSONBin.io:', error);
         // Сохраняем в localStorage как запасной вариант
-        setReviews(updatedReviews);
-        localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+        const sortedReviews = sortReviews(updatedReviews);
+        setReviews(sortedReviews);
+        localStorage.setItem('reviews', JSON.stringify(sortedReviews));
         setReviewForm({ name: '', text: '', rating: 5 });
         alert('Отзыв сохранен локально. Для синхронизации настройте JSONBin.io.');
       } finally {
@@ -192,8 +211,9 @@ function App() {
       }
     } else {
       // Используем localStorage как временное решение
-      setReviews(updatedReviews);
-      localStorage.setItem('reviews', JSON.stringify(updatedReviews));
+      const sortedReviews = sortReviews(updatedReviews);
+      setReviews(sortedReviews);
+      localStorage.setItem('reviews', JSON.stringify(sortedReviews));
       setReviewForm({ name: '', text: '', rating: 5 });
       alert('Спасибо за ваш отзыв! (Сохранено локально. Для синхронизации настройте JSONBin.io)');
       setIsSubmitting(false);
